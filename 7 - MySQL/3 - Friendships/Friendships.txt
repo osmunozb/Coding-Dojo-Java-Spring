@@ -1,0 +1,144 @@
+0-Usando el ERD como referencia, escribe una consulta SQL que devuelva una lista de usuarios junto con los nombres de sus amigos.
+
+-----Tabla como la imagen de Coding Dojo-----
+
+SELECT  users.first_name AS name, users.last_name, user2.first_name, user2.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+
+
+-----Tabla completa---------------------
+
+SELECT  users.first_name , users.last_name, user2.first_name, user2.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+UNION
+SELECT user2.first_name, user2.last_name, users.first_name, users.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+
+
+
+Ejercicio Adicional
+
+1------------------amigos de Kermit
+
+SELECT users.first_name, users.last_name FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+WHERE user2.first_name = "Kermit"
+
+
+2------------------recuento de todas las amistades
+
+SELECT COUNT(friendships.friend_id) AS Total_amistades FROM friendships
+
+
+3------------------quién tiene más amigos
+
+SELECT nombre, MAX(CONTADOR) AS "maximo numero de amigos" FROM(SELECT users.first_name AS nombre, COUNT(friendships.friend_id) AS contador FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+GROUP BY users.first_name) AS tablaTemporal
+
+
+----lo siguiente me muestra todas las personas con máximo número de amigos
+
+
+CREATE TEMPORARY TABLE tablaTemporal SELECT name, SUM(con) AS amig FROM (SELECT  users.first_name AS name, COUNT(friendships.friend_id) AS con  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+GROUP BY name
+UNION
+SELECT user2.first_name AS name, COUNT(friendships.friend_id) AS con FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+GROUP BY name) AS tabla
+GROUP BY name;
+SELECT name, amig FROM tablaTemporal
+WHERE amig = (SELECT MAX(amig) FROM tablaTemporal)
+
+
+
+4------------------nuevo usuario
+
+INSERT INTO users(id,first_name,last_name,created_at) VALUES ("6" ,"Nombre", "Apellido", "2022-04-14 16:12:11");
+
+
+INSERT INTO friendships (id,user_id,friend_id,created_at)  VALUES ("7","6","2","2022-04-14 17:00:00");
+INSERT INTO friendships (id,user_id,friend_id,created_at)  VALUES ("8","6","4","2022-04-14 17:00:00");
+INSERT INTO friendships (id,user_id,friend_id,created_at)  VALUES ("9","6","5","2022-04-14 17:00:00");
+
+
+SELECT users.first_name, users.last_name, user2.first_name AS friend_first_name, user2.last_name AS friend_last_name FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+
+
+5----------------------amigos de Eli
+
+SELECT user2.first_name, user2.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+WHERE users.first_name = "Eli" 
+UNION
+SELECT  users.first_name , users.last_name FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+WHERE user2.first_name = "Eli"
+ORDER BY first_name
+
+
+6--------------------elimina
+
+DELETE FROM friendships WHERE friendships.id = 5
+
+
+7-----------------------todas las mistades
+
+-----Tabla con todas las amistades-----
+
+SELECT  users.first_name AS name, users.last_name, user2.first_name, user2.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+
+
+-----Tabla completa (indica los amigos de todos)---------------------
+
+SELECT  users.first_name , users.last_name, user2.first_name, user2.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+UNION
+SELECT user2.first_name, user2.last_name, users.first_name, users.last_name  FROM users 
+JOIN friendships 
+ON users.id = friendships.user_id
+JOIN users as user2 
+ON user2.id = friendships.friend_id
+
+
+
+
