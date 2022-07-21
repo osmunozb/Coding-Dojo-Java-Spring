@@ -1,0 +1,47 @@
+header{
+    background-color: #B3B3B3;
+    border: 1px solid gray;
+}
+
+main{
+    background-color: #CCCCCC;
+    border: 1px solid gray;
+    margin: 15px 0;
+}
+
+footer{
+    background-color: #FFFF9A;
+    border: 1px solid gray;
+}
+
+span{
+    font-weight: bolder;
+}
+
+p, h1{
+  margin: 15px;
+}
+
+@media (max-width: 480px){
+    .desktop, .tablet{
+        display: none;
+    }
+}
+
+@media (min-width: 481px){
+    .desktop, .phone{
+        display: none;
+    }
+    .tablet{
+        display: block;
+    }
+}
+
+@media (min-width: 1024px){
+    .tablet, .phone{
+        display: none;
+    }
+    .desktop{
+        display: block;
+    }
+}
